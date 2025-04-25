@@ -1,0 +1,27 @@
+// Defining artifact types
+SoftwareItem :: ArtifactType.
+SoftwareRequirement :: ArtifactType.
+
+// Defining traces
+TraceLink[source => SoftwareItem, destination => SoftwareRequirement].
+
+// Sample artifacts
+SI1 : SoftwareItem.
+SI2 : SoftwareItem.
+SI3 : SoftwareItem. // This block is missing a trace
+
+SR1  : SoftwareRequirement.
+SR2  : SoftwareRequirement.
+
+// Example of correct trace links
+TL1 : TraceLink[source -> SI1, destination -> SR1].
+TL2 : TraceLink[source -> SI2, destination -> SR2].
+
+// Rule to check for missing traces
+missing_traceability(?SI) :-
+    ?SI : SoftwareItem,
+    \+ (?TL : TraceLink[source -> ?SI, destination -> ?SR]),
+    ?SR : SoftwareRequirement.
+
+// Query to list all missing traces
+?- missing_traceability(?X).
